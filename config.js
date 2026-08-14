@@ -60,6 +60,7 @@ const MinerConfig = {
       defaultVariant: 'v8',
       difficulty: 100000,
       blockReward: 4.6,
+      poolFee: 0.5,
     },
     // Bitcoin
     bitcoin: {
@@ -71,6 +72,7 @@ const MinerConfig = {
       defaultVariant: 'stratum',
       difficulty: 1,
       blockReward: 6.25,
+      poolFee: 2.0,
     },
     // Ethereum
     ethereum: {
@@ -82,6 +84,7 @@ const MinerConfig = {
       defaultVariant: 'v1',
       difficulty: 1000000000000,
       blockReward: 2,
+      poolFee: 1.5,
     },
     // Litecoin
     litecoin: {
@@ -93,6 +96,7 @@ const MinerConfig = {
       defaultVariant: 'standard',
       difficulty: 100000,
       blockReward: 12.5,
+      poolFee: 1.0,
     },
     // Dogecoin
     dogecoin: {
@@ -104,6 +108,7 @@ const MinerConfig = {
       defaultVariant: 'standard',
       difficulty: 100000,
       blockReward: 10000,
+      poolFee: 0.5,
     },
     // Dash
     dash: {
@@ -115,6 +120,19 @@ const MinerConfig = {
       defaultVariant: 'standard',
       difficulty: 50000,
       blockReward: 5.5,
+      poolFee: 1.5,
+    },
+    // Zcash
+    zcash: {
+      enabled: false, // DISABLED BY DEFAULT
+      symbol: 'ZEC',
+      name: 'Zcash',
+      algorithmFamily: 'Equihash',
+      variants: ['200_9', '144_5'],
+      defaultVariant: '200_9',
+      difficulty: 50000,
+      blockReward: 3.125,
+      poolFee: 2.0,
     },
   },
 
@@ -164,6 +182,8 @@ const MinerConfig = {
       caching: true,
       // Cache size in MB
       cacheSize: 64,
+      // Enable SIMD if available
+      useSIMD: true,
     },
   },
 
@@ -295,6 +315,16 @@ const MinerConfig = {
   getEnabledCryptos() {
     return Object.fromEntries(
       Object.entries(this.cryptocurrencies).filter(([_, cfg]) => cfg.enabled)
+    );
+  },
+
+  /**
+   * Get all enabled pools
+   * @returns {Object} Enabled pools
+   */
+  getEnabledPools() {
+    return Object.fromEntries(
+      Object.entries(this.pool.pools).filter(([_, cfg]) => cfg.enabled)
     );
   },
 
