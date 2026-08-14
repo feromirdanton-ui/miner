@@ -17,6 +17,7 @@ class MinerUI {
     if (this.isInitialized) return;
     this.render();
     this.attachEventListeners();
+    this.updateThreadDisplay();
     this.isInitialized = true;
   }
 
@@ -157,24 +158,6 @@ class MinerUI {
           <button id="settingsBtn" class="btn btn-secondary btn-small">⚙️ Settings</button>
           <button id="logsBtn" class="btn btn-secondary btn-small">📋 Logs</button>
         </div>
-
-        <!-- Advanced Settings Modal -->
-        <div id="settingsModal" class="modal hidden">
-          <div class="modal-content">
-            <span class="close" id="closeSettings">&times;</span>
-            <h2>Advanced Settings</h2>
-            ${this.renderAdvancedSettings()}
-          </div>
-        </div>
-
-        <!-- Logs Modal -->
-        <div id="logsModal" class="modal hidden">
-          <div class="modal-content">
-            <span class="close" id="closeLogs">&times;</span>
-            <h2>Mining Logs</h2>
-            <div id="logContainer" class="log-container"></div>
-          </div>
-        </div>
       </div>
     `;
   }
@@ -203,33 +186,10 @@ class MinerUI {
   renderPoolOptions() {
     const pools = this.config.pool.pools;
     return Object.entries(pools).map(([key, pool]) => `
-      <option value="${key}" ${pool.enabled ? 'selected' : ''} ${!pool.enabled ? 'disabled' : ''}>
+      <option value="${key}" ${pool.enabled ? 'selected' : ''}>
         ${pool.name} (${pool.url})
       </option>
     `).join('');
-  }
-
-  /**
-   * Render advanced settings
-   */
-  renderAdvancedSettings() {
-    return `
-      <div class="advanced-settings">
-        <div class="setting">
-          <label>Pool Whitelist:</label>
-          <input type="checkbox" id="poolWhitelist" ${this.config.security.poolWhitelist ? 'checked' : ''} />
-        </div>
-        <div class="setting">
-          <label>Auto Reconnect:</label>
-          <input type="checkbox" id="autoReconnect" ${this.config.advanced.autoReconnect ? 'checked' : ''} />
-        </div>
-        <div class="setting">
-          <label>Debug Mode:</label>
-          <input type="checkbox" id="debugMode" ${this.config.global.debug ? 'checked' : ''} />
-        </div>
-        <button class="btn btn-danger" id="resetConfig">Reset to Defaults</button>
-      </div>
-    `;
   }
 
   /**
@@ -283,11 +243,6 @@ class MinerUI {
     // Settings and Logs
     document.getElementById('settingsBtn')?.addEventListener('click', () => this.showSettings());
     document.getElementById('logsBtn')?.addEventListener('click', () => this.showLogs());
-    document.getElementById('closeSettings')?.addEventListener('click', () => this.hideSettings());
-    document.getElementById('closeLogs')?.addEventListener('click', () => this.hideLogs());
-
-    // Update thread display
-    this.updateThreadDisplay();
   }
 
   /**
@@ -299,17 +254,28 @@ class MinerUI {
   }
 
   /**
-   * Increase threads
+   * Decrease threads
    */
   decreaseThreads() {
-    // Implementation
+    const current = parseInt(document.getElementById('threadCount').textContent);
+    if (current > 1) {
+      const newCount = current - 1;
+      document.getElementById('threadCount').textContent = newCount;
+      this.config.set('performance.threads.current', newCount);
+    }
   }
 
   /**
-   * Decrease threads
+   * Increase threads
    */
   increaseThreads() {
-    // Implementation
+    const current = parseInt(document.getElementById('threadCount').textContent);
+    const max = navigator.hardwareConcurrency || 4;
+    if (current < max) {
+      const newCount = current + 1;
+      document.getElementById('threadCount').textContent = newCount;
+      this.config.set('performance.threads.current', newCount);
+    }
   }
 
   /**
@@ -349,41 +315,31 @@ class MinerUI {
   }
 
   /**
-   * Show settings modal
+   * Show settings
    */
   showSettings() {
-    document.getElementById('settingsModal').classList.remove('hidden');
+    alert('Settings dialog - implement as needed');
   }
 
   /**
-   * Hide settings modal
-   */
-  hideSettings() {
-    document.getElementById('settingsModal').classList.add('hidden');
-  }
-
-  /**
-   * Show logs modal
+   * Show logs
    */
   showLogs() {
-    document.getElementById('logsModal').classList.remove('hidden');
-  }
-
-  /**
-   * Hide logs modal
-   */
-  hideLogs() {
-    document.getElementById('logsModal').classList.add('hidden');
+    alert('Logs dialog - implement as needed');
   }
 }
 
 // Auto-initialize when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    const ui = new MinerUI('miner-container');
-    ui.init();
+    if (document.getElementById('miner-container')) {
+      const ui = new MinerUI('miner-container');
+      ui.init();
+    }
   });
 } else {
-  const ui = new MinerUI('miner-container');
-  ui.init();
+  if (document.getElementById('miner-container')) {
+    const ui = new MinerUI('miner-container');
+    ui.init();
+  }
 }

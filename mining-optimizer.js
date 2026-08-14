@@ -59,11 +59,6 @@ class MiningOptimizer {
         (performance.memory.usedJSHeapSize / performance.memory.jsHeapSizeLimit) * 100
       );
     }
-
-    // Log stats if debug enabled
-    if (this.config.global.debug) {
-      console.log(`[Optimizer] CPU: ${this.stats.cpuUsage}% | Mem: ${this.stats.memoryUsage}%`);
-    }
   }
 
   /**
@@ -168,9 +163,4 @@ class MiningOptimizer {
       temperature: 0,
     };
   }
-}
-
-// Export for use in other modules
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = MiningOptimizer;
 }
