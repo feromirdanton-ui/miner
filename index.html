@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Web Miner</title>
+    <link rel="stylesheet" href="scripts/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Crypto Web Miner</h1>
+        <div class="stats">
+            <div class="stat-box">
+                <h2>Hash Rate</h2>
+                <p id="hashrate">0 H/s</p>
+            </div>
+            <div class="stat-box">
+                <h2>Shares Accepted</h2>
+                <p id="shares">0</p>
+            </div>
+            <div class="stat-box">
+                <h2>Total Hashes</h2>
+                <p id="hashes">0</p>
+            </div>
+        </div>
+        <div class="controls">
+            <button id="startBtn" class="btn btn-primary">Start Mining</button>
+            <button id="stopBtn" class="btn btn-danger" disabled>Stop Mining</button>
+        </div>
+        <div class="chart-container">
+            <canvas id="hashRateChart"></canvas>
+        </div>
+    </div>
+
+    <script src="scripts/jquery-3.2.1.min.js"></script>
+    <script src="scripts/jquery.cookie-1.4.1.min.js"></script>
+    <script src="scripts/Chart.min.js"></script>
+    <script src="scripts/gustav.js"></script>
+</body>
+</html>
